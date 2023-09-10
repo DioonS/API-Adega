@@ -22,7 +22,7 @@ public class ProductServiceImpl implements ProductService {
     private CategoryRepo cRepo;
 
     @Override
-    public List<Product> viewAllProduct() throws ProductException {
+    public List<Product> getAllProducts() throws ProductException {
         List<Product> products = pRepo.findAll();
         if (!products.isEmpty()) {
             return products;
@@ -43,8 +43,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product updateProduct(Product product) throws ProductException {
-        Optional<Product> optional = pRepo.findById(product.getProductId());
+        // Checa se o ID do produto existe antes de fazer a atualização
+        Integer productId = product.getProductId();
+        Optional<Product> optional = pRepo.findById(productId);
         if (optional.isPresent()) {
+            Product existingProduct = optional.get();
+
+            // Atualiza apenas campos permitidos
+            existingProduct.setProductName(product.getProductName());
+            existingProduct.setProductDescription(product.getProductDescription());
+            existingProduct.setPrice(product.getPrice());
+
+            // Salva e retorna o produto atualizado
             return pRepo.save(product);
         } else {
             throw new ProductException("Produto não atualizado");
@@ -52,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product viewProduct(Integer productId) throws ProductException {
+    public Product getProductById(Integer productId) throws ProductException {
         Optional<Product> optional = pRepo.findById(productId);
         if (optional.isPresent()) {
             return optional.get();
@@ -62,7 +72,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> viewProductByCategory(Integer categoryId) throws ProductException {
+    public Category getCategoryById(Integer categoryId) throws ProductException {
+        Optional<Category> category = cRepo.findById(categoryId);
+        if (category.isPresent()) {
+            return category.get();
+        } else {
+            throw new ProductException("Categoria não encontrada com o ID da Categoria - " + categoryId);
+        }
+    }
+
+    @Override
+    public List<Product> getProductByCategory(Integer categoryId) throws ProductException {
         Optional<Category> category = cRepo.findById(categoryId);
         if (category.isPresent()) {
             return category.get().getProductList();

@@ -1,9 +1,8 @@
 package com.api.adega.api.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-
-import java.sql.Blob;
 
 @Data
 @Embeddable
@@ -14,17 +13,21 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer productId;
 
-    private ImageSource imageSource; // Enum para indicar a origem da imagem (UPLOAD ou EXTERNAL_URL)
+    //private ImageSource imageSource; // Enum para indicar a origem da imagem (UPLOAD ou EXTERNAL_URL)
 
-    @Lob
-    private Blob productImage; // Campo Blob para armazenar a imagem (será preenchido somente se a origem for UPLOAD)
+    //@Lob
+    //private Blob productImage; // Campo Blob para armazenar a imagem (será preenchido somente se a origem for UPLOAD)
+
+    @NotBlank
+    private String productName;
 
     private String productDescription;
 
     private Double price;
 
+    @NotBlank
     private String contentType;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Category category;
 }

@@ -1,11 +1,12 @@
 package com.api.adega.api.exception;
 
-public class ProductException extends Exception {
+public class ProductException extends RuntimeException {
     public ProductException() {
         // TODO Auto-generated constructor stub
     }
 
-    public ProductException(String mesg) {
-        super(mesg);
+    public ProductException(String message) {
+        super(message);
     }
 }
+
