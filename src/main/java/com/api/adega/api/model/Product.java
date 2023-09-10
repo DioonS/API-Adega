@@ -13,10 +13,13 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer productId;
 
-    //private ImageSource imageSource; // Enum para indicar a origem da imagem (UPLOAD ou EXTERNAL_URL)
+    private ImageSource imageSource; // Enum para indicar a origem da imagem (UPLOAD ou EXTERNAL_URL)
 
-    //@Lob
-    //private Blob productImage; // Campo Blob para armazenar a imagem (será preenchido somente se a origem for UPLOAD)
+
+    @Column
+    private String productImageFileName; // Nome da imagem
+
+    private String productImage; // Campo para armazenar a imagem (será preenchido somente se a origem for UPLOAD)
 
     @NotBlank
     private String productName;
