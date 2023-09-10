@@ -2,6 +2,7 @@ package com.api.adega.api.service;
 
 import com.api.adega.api.exception.ImageNotFoundException;
 import com.api.adega.api.exception.ImageUploadException;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {

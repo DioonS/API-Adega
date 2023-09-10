@@ -5,6 +5,7 @@ import com.api.adega.api.exception.ImageUploadException;
 import com.api.adega.api.service.ImageService;
 import org.apache.tomcat.util.http.fileupload.impl.IOFileUploadException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,9 +15,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+@Service
 public class ImageServiceImpl implements ImageService {
 
-    @Value("{image.upload.directory}")
+    @Value("${image.upload.directory}")
     private String imageUploadDirectory;
 
     @Override

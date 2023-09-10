@@ -4,6 +4,7 @@ import com.api.adega.api.exception.ImageUploadException;
 import com.api.adega.api.exception.ProductException;
 import com.api.adega.api.exception.ProductNotFoundException;
 import com.api.adega.api.model.Category;
+import com.api.adega.api.model.ImageSource;
 import com.api.adega.api.model.Product;
 import com.api.adega.api.repository.ProductRepo;
 import com.api.adega.api.service.ImageService;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -38,22 +40,29 @@ public class ProductsController {
     }
 
     @PostMapping//("/create")
-    public ResponseEntity<Product> addProduct(Product product, MultipartFile imageFile) throws ProductException {
+    public ResponseEntity<Product> addProduct(@Valid Product product, @RequestParam("imageFile") MultipartFile imageFile) throws ProductException {
         try {
             // Upload da imagem e recuperar o arquivo pelo nome
             String imageFileName = imageService.uploadImage(imageFile);
             product.setProductImageFileName(imageFileName);
 
+            if (product.getImageSource() == ImageSource.UPLOAD) {
+                byte[] imageBytes = imageFile.getBytes();
+                product.setProductImage(imageBytes);
+            }
+
             // salvar o produto
             Product prod = productRepo.save(product);
 
             if (prod != null) {
-                return prod;
+                return new ResponseEntity<>(prod, HttpStatus.OK);
             } else {
                 throw new ProductException("Produto não adicionado!");
             }
         } catch (ImageUploadException e) {
             throw new ProductException("Falha no upload da imagem: " + e.getMessage());
+        } catch (IOException e) {
+            throw new ProductException("Falha no processamento da imagem: " + e.getMessage());
         }
     }
 
@@ -61,9 +70,11 @@ public class ProductsController {
     public ResponseEntity<Product> updateProduct(@PathVariable("productsId") Integer productsId, @Valid @RequestBody Product product, MultipartFile imageFile)  {
         try {
 
-            if (imageFile != null) {
+            if (imageFile != null && product.getImageSource() == ImageSource.UPLOAD) {
                 String imageFileName = imageService.uploadImage(imageFile);
                 product.setProductImageFileName(imageFileName);
+                byte[] imageBytes = imageFile.getBytes();
+                product.setProductImage(imageBytes);
             }
 
             Product existingProduct = productService.getProductById(productsId);
@@ -81,6 +92,8 @@ public class ProductsController {
             return new ResponseEntity<>(updateProd, HttpStatus.OK);
         } catch (ProductNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IOException e) {
+            throw new ProductException("Falha no processamento da imagem: " + e.getMessage());
         }
     }
 
