@@ -1,5 +1,6 @@
 package com.api.adega.api.controller;
 
+import com.api.adega.api.configurations.PathConfig;
 import com.api.adega.api.exception.ImageNotFoundException;
 import com.api.adega.api.exception.ImageUploadException;
 import com.api.adega.api.implementation.ImageServiceImpl;
@@ -25,13 +26,22 @@ import java.util.UUID;
 @CrossOrigin("*")
 public class ImageController {
 
+    //@Autowired
+    private final ImageService imageService;
+
+    //@Autowired
+    private final PathConfig pathConfig;
+
     @Autowired
-    private ImageService imageService;
+    public ImageController(ImageService imageService, PathConfig pathConfig) {
+        this.imageService = imageService;
+        this.pathConfig = pathConfig;
+    }
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadImage(@RequestParam("file")MultipartFile file) {
         log.info("Recebendo o arquivo: ", file.getOriginalFilename());
-        var routeFile = pathFile + UUID.randomUUID() + "." + extractExtension(file.getOriginalFilename());
+        var routeFile = pathConfig.getPathFiles() + UUID.randomUUID() + "." + extractExtension(file.getOriginalFilename());
 
         log.info("Novo nome do arquivo: " + routeFile);
 

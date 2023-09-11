@@ -1,11 +1,10 @@
 package com.api.adega.api.implementation;
 
-import com.api.adega.api.controller.ImageController;
+import com.api.adega.api.configurations.PathConfig;
 import com.api.adega.api.exception.ImageNotFoundException;
 import com.api.adega.api.exception.ImageUploadException;
 import com.api.adega.api.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,14 +18,18 @@ import java.nio.file.StandardCopyOption;
 @Service
 public class ImageServiceImpl implements ImageService {
 
-    @Value("${image.upload.directory}")
-    public String imageUploadDirectory;
+    private final PathConfig pathConfig;
+
+    @Autowired
+    public ImageServiceImpl(PathConfig pathConfig) {
+        this.pathConfig = pathConfig;
+    }
 
     @Override
     public String uploadImage(MultipartFile file) throws ImageUploadException {
         try {
             String fileName = file.getOriginalFilename();
-            String filePath = Paths.get(imageUploadDirectory, fileName).toString();
+            String filePath = Paths.get(pathConfig.getPathFiles(), fileName).toString();
 
             Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
             return fileName;
@@ -38,7 +41,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public byte[] downloadImage(String imagePath) throws ImageNotFoundException {
         try {
-            File file = new File(Paths.get(imageUploadDirectory, imagePath).toString());
+            File file = new File(Paths.get(pathConfig.getPathFiles(), imagePath).toString());
             if (!file.exists()) {
                 throw new ImageNotFoundException("Imagem não encontrada!");
             }
