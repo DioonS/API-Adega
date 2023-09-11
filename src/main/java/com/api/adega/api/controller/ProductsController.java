@@ -1,24 +1,21 @@
 package com.api.adega.api.controller;
 
-import com.api.adega.api.exception.ImageUploadException;
-import com.api.adega.api.exception.ProductException;
+import com.api.adega.api.exception.CategoryNotFoundException;
 import com.api.adega.api.exception.ProductNotFoundException;
 import com.api.adega.api.model.Category;
-import com.api.adega.api.model.ImageSource;
 import com.api.adega.api.model.Product;
 import com.api.adega.api.repository.ProductRepo;
-import com.api.adega.api.service.ImageService;
 import com.api.adega.api.service.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/products")
@@ -26,9 +23,6 @@ public class ProductsController {
 
     @Autowired
     private ProductService productService;
-
-    @Autowired
-    private ImageService imageService;
 
     @Autowired
     private ProductRepo productRepo;
@@ -40,43 +34,21 @@ public class ProductsController {
     }
 
     @PostMapping//("/create")
-    public ResponseEntity<Product> addProduct(@Valid Product product, @RequestParam("imageFile") MultipartFile imageFile) throws ProductException {
+    public ResponseEntity<Product> addProduct(@Valid @RequestBody Product product) {
         try {
-            // Upload da imagem e recuperar o arquivo pelo nome
-            String imageFileName = imageService.uploadImage(imageFile);
-            product.setProductImageFileName(imageFileName);
+            Category category = productService.getCategoryById(product.getCategory().getCategoryId());
+            product.setCategory(category);
 
-            if (product.getImageSource() == ImageSource.UPLOAD) {
-                byte[] imageBytes = imageFile.getBytes();
-                product.setProductImage(imageBytes);
-            }
-
-            // salvar o produto
-            Product prod = productRepo.save(product);
-
-            if (prod != null) {
-                return new ResponseEntity<>(prod, HttpStatus.OK);
-            } else {
-                throw new ProductException("Produto não adicionado!");
-            }
-        } catch (ImageUploadException e) {
-            throw new ProductException("Falha no upload da imagem: " + e.getMessage());
-        } catch (IOException e) {
-            throw new ProductException("Falha no processamento da imagem: " + e.getMessage());
+            Product prod = productService.addProduct(product);
+            return new ResponseEntity<>(prod, HttpStatus.CREATED);
+        } catch (CategoryNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/{productsId}")
-    public ResponseEntity<Product> updateProduct(@PathVariable("productsId") Integer productsId, @Valid @RequestBody Product product, MultipartFile imageFile)  {
+    public ResponseEntity<Product> updateProduct(@PathVariable("productsId") Integer productsId, @Valid @RequestBody Product product)  {
         try {
-
-            if (imageFile != null && product.getImageSource() == ImageSource.UPLOAD) {
-                String imageFileName = imageService.uploadImage(imageFile);
-                product.setProductImageFileName(imageFileName);
-                byte[] imageBytes = imageFile.getBytes();
-                product.setProductImage(imageBytes);
-            }
-
             Product existingProduct = productService.getProductById(productsId);
 
             existingProduct.setProductName(product.getProductName());
@@ -92,8 +64,6 @@ public class ProductsController {
             return new ResponseEntity<>(updateProd, HttpStatus.OK);
         } catch (ProductNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (IOException e) {
-            throw new ProductException("Falha no processamento da imagem: " + e.getMessage());
         }
     }
 

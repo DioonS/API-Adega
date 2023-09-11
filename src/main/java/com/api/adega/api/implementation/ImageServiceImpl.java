@@ -1,9 +1,10 @@
 package com.api.adega.api.implementation;
 
+import com.api.adega.api.controller.ImageController;
 import com.api.adega.api.exception.ImageNotFoundException;
 import com.api.adega.api.exception.ImageUploadException;
 import com.api.adega.api.service.ImageService;
-import org.apache.tomcat.util.http.fileupload.impl.IOFileUploadException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -19,7 +20,7 @@ import java.nio.file.StandardCopyOption;
 public class ImageServiceImpl implements ImageService {
 
     @Value("${image.upload.directory}")
-    private String imageUploadDirectory;
+    public String imageUploadDirectory;
 
     @Override
     public String uploadImage(MultipartFile file) throws ImageUploadException {
