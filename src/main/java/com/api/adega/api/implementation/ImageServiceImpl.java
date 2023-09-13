@@ -1,4 +1,4 @@
-package com.api.adega.api.implementation;
+/*package com.api.adega.api.implementation;
 
 import com.api.adega.api.configurations.PathConfig;
 import com.api.adega.api.exception.ImageNotFoundException;
@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
@@ -30,6 +31,8 @@ public class ImageServiceImpl implements ImageService {
         try {
             String fileName = file.getOriginalFilename();
             String filePath = Paths.get(pathConfig.getPathFiles(), fileName).toString();
+
+            Files.write(Path.of(filePath), file.getBytes());
 
             Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
             return fileName;
@@ -50,4 +53,4 @@ public class ImageServiceImpl implements ImageService {
             throw new ImageNotFoundException("Falha no download da imagem: " + e.getMessage());
         }
     }
-}
+}*/

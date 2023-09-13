@@ -13,7 +13,6 @@ public class Image {
 
     //private ImageSource imageSource;
 
-    @Column
     private String productImageFileName; // Nome da imagem
 
     @Lob
