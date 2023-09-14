@@ -12,7 +12,7 @@ import java.util.Base64;
 @Service
 public class ImageService {
 
-    private static final String IMAGE_UPLOAD_DIRECTORY = "C:\\Users\\diego.dionisio\\Pictures\\directory";
+    private static final String IMAGE_UPLOAD_DIRECTORY = "C:\\Users\\diego.dionisio\\Desktop\\directory";
 
     public void saveImage(Image image) {
         try {
