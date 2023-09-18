@@ -3,19 +3,29 @@ package com.api.adega.api.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Data
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Table(name = "image")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Image {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer imageId;
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    //private ImageSource imageSource;
+    @Column(name = "name")
+    private String name;
 
-    private String productImageFileName; // Nome da imagem
-
-    @Lob
-    private byte[] productImage; // Campo para armazenar a imagem (será preenchido somente se a origem for UPLOAD)
-
+    @Column(name = "type")
+    private String type;
 }
+
