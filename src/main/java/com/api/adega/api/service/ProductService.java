@@ -1,9 +1,8 @@
 package com.api.adega.api.service;
 
 import com.api.adega.api.exception.ProductException;
-import com.api.adega.api.model.Category;
-import com.api.adega.api.model.Product;
-import org.springframework.stereotype.Service;
+import com.api.adega.api.entities.Category;
+import com.api.adega.api.entities.Product;
 
 import java.util.List;
 

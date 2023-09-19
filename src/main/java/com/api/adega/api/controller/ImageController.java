@@ -1,7 +1,7 @@
 package com.api.adega.api.controller;
 
 import com.api.adega.api.config.ImageStorageConfig;
-import com.api.adega.api.model.Image;
+import com.api.adega.api.entities.Image;
 import com.api.adega.api.repository.ImageRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,7 +38,7 @@ public class ImageController {
     ImageStorageConfig storageConfig;
 
     @GetMapping(path = {"/{name}"})
-    @Operation(summary = "Pesquisa imagem por nome no sistema.")
+    @Operation(summary = "Pesquisar imagem", description = "Pesquisa imagem por nome.")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "200", description = "Pesquisa realizada com sucesso!",
                     content = { @Content(mediaType = "application/json",
@@ -46,7 +46,7 @@ public class ImageController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error",
                     content = @Content)
     })
-    public ResponseEntity<byte[]> getImage(@PathVariable("name") String name) throws IOException {
+    public ResponseEntity<byte[]> getImage(@PathVariable("name") String name) {
 
         final Optional<Image> dbImage = imageRepository.findByName(name);
 
@@ -74,7 +74,7 @@ public class ImageController {
 
     @PostMapping("/upload")
     @Transactional
-    @Operation(summary = "Adiciona imagem no sistema.")
+    @Operation(summary = "Adicionar imagem.", description = "Adiciona nova imagem no diretório do sistema")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "200", description = "Imagem adicionada com sucesso!",
                     content = { @Content(mediaType = "application/json",
@@ -98,7 +98,7 @@ public class ImageController {
     }
 
     @GetMapping("/listaImagens")
-    @Operation(summary = "Lista todas as imagem no sistema.")
+    @Operation(summary = "Listagem de todas as imagens.", description = "Lista todas as imagens presentes no diretório")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "200", description = "Listagem gerada com sucesso!",
                     content = { @Content(mediaType = "application/json",
@@ -119,10 +119,9 @@ public class ImageController {
         }
     }
 
-
     @DeleteMapping("/delete/{name}")
     @Transactional
-    @Operation(summary = "Excluir imagem por nome.")
+    @Operation(summary = "Excluir imagem.", description = "Exclui imagem (por nome) do diretorio ")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "200", description = "Exclusão realizada com sucesso!",
                     content = { @Content(mediaType = "application/json",
@@ -154,7 +153,7 @@ public class ImageController {
     }
 
     @PutMapping("/update/{name}")
-    @Operation(summary = "Atualiza imagem por nome.")
+    @Operation(summary = "Atualiza imagem.", description = "Atualiza nome ou imagem (por nome) no diretório")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "200", description = "Atualização realizada com sucesso!",
                     content = { @Content(mediaType = "application/json",
@@ -179,11 +178,12 @@ public class ImageController {
                             .body("Erro ao atualizar o nome da imagem: " + name);
                 }
 
-                Optional<Image> dbImage = imageRepository.findByName(name);
-                if (dbImage.isPresent()) {
-                    Image image = dbImage.get();
-                    image.setName(updateName);
-                    imageRepository.save(image);
+                Optional<Image> dbImageOptional = imageRepository.findByName(name);
+                if (dbImageOptional.isPresent()) {
+
+                    Image dbImage = dbImageOptional.get();
+                    dbImage.setName(updateName);
+                    imageRepository.save(dbImage);
                 }
 
                 if (newImage != null) {
@@ -198,11 +198,11 @@ public class ImageController {
             }
         } else {
             return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body("Imagem não encontrada: " + name);
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("O novo nome não pode estar vazio.");
         }
         return ResponseEntity
-                .ok()
-                .body("Nenhuma atualização foi realizada para a imagem: " + name);
+                .status(HttpStatus.NOT_FOUND)
+                .body("Imagem não encontrada: " + name);
     }
 }

@@ -1,8 +1,8 @@
-package com.api.adega.api.implementation;
+package com.api.adega.api.service.impl;
 
 import com.api.adega.api.exception.ProductException;
-import com.api.adega.api.model.Category;
-import com.api.adega.api.model.Product;
+import com.api.adega.api.entities.Category;
+import com.api.adega.api.entities.Product;
 import com.api.adega.api.repository.CategoryRepo;
 import com.api.adega.api.repository.ProductRepo;
 import com.api.adega.api.service.ProductService;

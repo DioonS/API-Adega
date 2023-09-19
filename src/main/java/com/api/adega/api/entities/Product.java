@@ -1,4 +1,4 @@
-package com.api.adega.api.model;
+package com.api.adega.api.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

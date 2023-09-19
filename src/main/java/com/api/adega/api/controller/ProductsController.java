@@ -2,9 +2,9 @@ package com.api.adega.api.controller;
 
 import com.api.adega.api.exception.CategoryNotFoundException;
 import com.api.adega.api.exception.ProductNotFoundException;
-import com.api.adega.api.model.Category;
-import com.api.adega.api.model.Image;
-import com.api.adega.api.model.Product;
+import com.api.adega.api.entities.Category;
+import com.api.adega.api.entities.Image;
+import com.api.adega.api.entities.Product;
 import com.api.adega.api.repository.ProductRepo;
 import com.api.adega.api.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +33,7 @@ public class ProductsController {
     private ProductRepo productRepo;
 
     @GetMapping//("/view")
-    @Operation(summary = "Lista todos os produtos do sistema.")
+    @Operation(summary = "Lista produtos.", description = "Retorna lista de produtos presentes no sistema.")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "200", description = "Lista gerada com sucesso!",
                     content = { @Content(mediaType = "application/json",
@@ -48,7 +47,7 @@ public class ProductsController {
     }
 
     @PostMapping//("/create")
-    @Operation(summary = "Adiciona novo produto no sistema.")
+    @Operation(summary = "Adiciona produto.", description = "Adiciona novo produto no sistema.")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "201", description = "Produto adicionado com sucesso!",
                     content = { @Content(mediaType = "application/json",
@@ -69,7 +68,7 @@ public class ProductsController {
     }
 
     @PutMapping("/{productsId}")
-    @Operation(summary = "Atualiza produto no sistema.")
+    @Operation(summary = "Atualiza produto.", description = "Atualiza produto via ID")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso!",
                     content = { @Content(mediaType = "application/json",
@@ -98,7 +97,7 @@ public class ProductsController {
     }
 
     @GetMapping("/{productId}")
-    @Operation(summary = "Pesquisa produto no sistema por ID.")
+    @Operation(summary = "Pesquisar produto.", description = "Pesquisar produto por ID")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "200", description = "Produto pesquisado com sucesso!",
                     content = { @Content(mediaType = "application/json",
@@ -112,7 +111,7 @@ public class ProductsController {
     }
 
     @GetMapping("/category/{categoryId}")
-    @Operation(summary = "Lista produto por Categoria.")
+    @Operation(summary = "Lista produto por Categoria.", description = "Lista os produtos presentes em determinada Categoria")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "201", description = "Listagem gerada com sucesso!",
                     content = { @Content(mediaType = "application/json",
@@ -126,7 +125,7 @@ public class ProductsController {
     }
 
     @DeleteMapping("/{productsId}")
-    @Operation(summary = "Exclui produto no sistema.")
+    @Operation(summary = "Exclui produto.", description = "Exclui produto por ID")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "204", description = "Produto excluido com sucesso.",
                     content = { @Content(mediaType = "application/json",

@@ -1,7 +1,6 @@
-package com.api.adega.api.model;
+package com.api.adega.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 

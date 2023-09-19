@@ -1,12 +1,10 @@
-package com.api.adega.api.model;
+package com.api.adega.api.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
