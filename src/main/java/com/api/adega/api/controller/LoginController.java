@@ -2,6 +2,7 @@ package com.api.adega.api.controller;
 
 import com.api.adega.api.dto.LoginDto;
 import com.api.adega.api.entities.Image;
+import com.api.adega.api.security.JwtUtils;
 import com.api.adega.api.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,8 +44,12 @@ public class LoginController {
         String userType = userService.getUserTypeByCredentials(loginDto.getUsername(), loginDto.getPassword());
 
         if (userType != null) {
+            String token = JwtUtils.generationToken(loginDto.getUsername());
+
             Map<String, String> response = new HashMap<>();
             response.put("userType", userType);
+            response.put("token", token);
+
             return ResponseEntity.ok(response);
         } else {
             Map<String, String> errorResponse = new HashMap<>();
