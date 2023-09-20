@@ -2,7 +2,7 @@ package com.api.adega.api.controller;
 
 import com.api.adega.api.config.ImageStorageConfig;
 import com.api.adega.api.entities.Image;
-import com.api.adega.api.repository.ImageRepository;
+import com.api.adega.api.repository.ImageRepo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,13 +32,13 @@ import java.util.UUID;
 public class ImageController {
 
     @Autowired
-    ImageRepository imageRepository;
+    ImageRepo imageRepository;
 
     @Autowired
     ImageStorageConfig storageConfig;
 
     @GetMapping(path = {"/{name}"})
-    @Operation(summary = "Pesquisar imagem", description = "Pesquisa imagem por nome.")
+    @Operation(summary = "Pesquisar imagem.", description = "Pesquisa imagem por nome.")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "200", description = "Pesquisa realizada com sucesso!",
                     content = { @Content(mediaType = "application/json",
