@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,9 +24,11 @@ import java.util.Map;
 public class LoginController {
 
     private final UserService userService;
+    private final JwtUtils jwtUtils;
 
-    public LoginController(UserService userService) {
+    public LoginController(UserService userService, JwtUtils jwtUtils) {
         this.userService = userService;
+        this.jwtUtils = jwtUtils;
     }
 
     @PostMapping("/login")
@@ -44,7 +45,7 @@ public class LoginController {
         String userType = userService.getUserTypeByCredentials(loginDto.getUsername(), loginDto.getPassword());
 
         if (userType != null) {
-            String token = JwtUtils.generationToken(loginDto.getUsername());
+            String token = jwtUtils.generationToken(loginDto.getUsername());
 
             Map<String, String> response = new HashMap<>();
             response.put("userType", userType);
