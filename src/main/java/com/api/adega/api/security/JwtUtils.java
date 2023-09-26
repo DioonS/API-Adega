@@ -16,13 +16,13 @@ public class JwtUtils {
     private String SECRET_KEY;
     private static final long EXPIRATION_TIME = 3600000; // 1H
 
-    public String generationToken(String username) {
+    public String generationToken(String email) {
         if (StringUtils.hasText(SECRET_KEY)) {
             Date now = new Date();
             Date expirationDate = new Date(now.getTime() + EXPIRATION_TIME);
 
             return Jwts.builder()
-                    .setSubject(username)
+                    .setSubject(email)
                     .setIssuedAt(now)
                     .setExpiration(expirationDate)
                     .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
@@ -33,7 +33,7 @@ public class JwtUtils {
 
     }
 
-    public String getUsernameFromToken(String token) {
+    public String getEmailFromToken(String token) {
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(SECRET_KEY)

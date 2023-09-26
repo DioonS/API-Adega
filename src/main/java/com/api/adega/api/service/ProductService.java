@@ -21,4 +21,6 @@ public interface ProductService {
     public List<Product> getProductByCategory(Integer categoryId) throws ProductException;
 
     public Product removeProduct(Integer productId) throws ProductException;
+
+    Category setCategoryById(Integer categoryId);
 }

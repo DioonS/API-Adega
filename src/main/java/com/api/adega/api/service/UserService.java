@@ -17,5 +17,5 @@ public interface UserService {
 
     void deleteUser(Long id);
 
-    String getUserTypeByCredentials(String username, String password);
+    String getUserTypeByCredentials(String email, String password);
 }

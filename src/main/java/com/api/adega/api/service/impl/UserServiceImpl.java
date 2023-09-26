@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         if (userExists.isPresent()) {
             User user = userExists.get();
             user.setName(userUpdated.getName());
-            user.setUsername(userUpdated.getUsername());
+            user.setEmail(userUpdated.getEmail());
             return userRepo.save(user);
         } else {
             throw new RuntimeException("Usuário não encontrado com o ID: " + id);
@@ -54,9 +54,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getUserTypeByCredentials(String username, String password) {
+    public String getUserTypeByCredentials(String email, String password) {
 
-        User user = userRepo.findByUsername(username);
+        User user = userRepo.findByEmail(email);
 
         if (user != null && user.getPassword().equals(password)) {
             return user.getUserType();

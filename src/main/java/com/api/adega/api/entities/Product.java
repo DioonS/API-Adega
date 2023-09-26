@@ -1,11 +1,13 @@
 package com.api.adega.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-@Embeddable
 @Entity
 public class Product {
 
@@ -25,4 +27,8 @@ public class Product {
 
     @ManyToOne
     private Category category;
+
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Image images;
 }

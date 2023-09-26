@@ -42,10 +42,10 @@ public class LoginController {
     })
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
 
-        String userType = userService.getUserTypeByCredentials(loginDto.getUsername(), loginDto.getPassword());
+        String userType = userService.getUserTypeByCredentials(loginDto.getEmail(), loginDto.getPassword());
 
         if (userType != null) {
-            String token = jwtUtils.generationToken(loginDto.getUsername());
+            String token = jwtUtils.generationToken(loginDto.getEmail());
 
             Map<String, String> response = new HashMap<>();
             response.put("userType", userType);

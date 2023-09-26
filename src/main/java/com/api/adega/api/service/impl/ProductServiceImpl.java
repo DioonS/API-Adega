@@ -1,10 +1,14 @@
 package com.api.adega.api.service.impl;
 
+import com.api.adega.api.dto.ImageDto;
+import com.api.adega.api.entities.Image;
+import com.api.adega.api.exception.CategoryNotFoundException;
 import com.api.adega.api.exception.ProductException;
 import com.api.adega.api.entities.Category;
 import com.api.adega.api.entities.Product;
 import com.api.adega.api.repository.CategoryRepo;
 import com.api.adega.api.repository.ProductRepo;
+import com.api.adega.api.service.CategoryService;
 import com.api.adega.api.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +67,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getProductById(Integer productId) throws ProductException {
+
+        System.out.println("imagem");
+
         Optional<Product> optional = pRepo.findById(productId);
         if (optional.isPresent()) {
             return optional.get();
@@ -96,5 +103,15 @@ public class ProductServiceImpl implements ProductService {
         Product product = pRepo.findById(productId).orElseThrow(() -> new ProductException("Produto não encontrado"));
         pRepo.delete(product);
         return product;
+    }
+
+    @Override
+    public Category setCategoryById(Integer categoryId) throws CategoryNotFoundException {
+        Optional<Category> categoryOptional = cRepo.findById(categoryId);
+        if (categoryOptional.isPresent()) {
+            return categoryOptional.get();
+        } else {
+            throw new CategoryNotFoundException("Categoria não encontrada com o ID: " + categoryId);
+        }
     }
 }

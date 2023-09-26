@@ -18,7 +18,7 @@ public class User {
     private String name;
 
     @NotBlank
-    private String username;
+    private String email;
 
     @NotBlank
     private String password;

@@ -1,6 +1,7 @@
 package com.api.adega.api.service.impl;
 
 import com.api.adega.api.entities.Category;
+import com.api.adega.api.exception.CategoryNotFoundException;
 import com.api.adega.api.repository.CategoryRepo;
 import com.api.adega.api.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,4 +53,15 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(Integer categoryId) {
         categoryRepo.deleteById(categoryId);
     }
+
+    @Override
+    public Category setCategoryById(Integer categoryId) throws CategoryNotFoundException {
+        Optional<Category> categoryOptional = categoryRepo.findById(categoryId);
+        if (categoryOptional.isPresent()) {
+            return categoryOptional.get();
+        } else {
+            throw new CategoryNotFoundException("Categoria não encontrada com o ID: " + categoryId);
+        }
+    }
+
 }
