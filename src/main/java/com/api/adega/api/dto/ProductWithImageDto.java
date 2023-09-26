@@ -1,19 +1,21 @@
 package com.api.adega.api.dto;
 
-import com.api.adega.api.entities.Image;
 import com.api.adega.api.entities.Product;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import org.apache.tomcat.util.codec.binary.Base64;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 public class ProductWithImageDto {
 
     private Product product;
 
-    @JsonIgnore
-    private Image image;
+    //@JsonIgnore
+    private byte[] imageBytes;
+
+    public String getImageBytesAsBase64() {
+        if (imageBytes != null) {
+            return Base64.encodeBase64String(imageBytes);
+        }
+        return null;
+    }
 }

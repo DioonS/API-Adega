@@ -11,4 +11,8 @@ public interface ImageService {
     void saveImage(Image image, MultipartFile imageFile) throws IOException;
 
     Image getImageById(Long id);
+
+    byte[] getImageBytesById(Long id);
+
+    byte[] getImagesBytesForProduct(Product product);
 }

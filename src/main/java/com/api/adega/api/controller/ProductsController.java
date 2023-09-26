@@ -59,10 +59,16 @@ public class ProductsController {
         List<ProductWithImageDto> productsWithImage = new ArrayList<>();
 
         for (Product product : products) {
-            ProductWithImageDto productWithImageItem = new ProductWithImageDto(product, imageService.getImageForProduct(product));
+            ProductWithImageDto productWithImageItem = new ProductWithImageDto();
+            productWithImageItem.setProduct(product);
+
+            // Obtenha os bytes da imagem e defina no DTO
+            byte[] imageBytes = imageService.getImagesBytesForProduct(product);
+            productWithImageItem.setImageBytes(imageBytes);
 
             productsWithImage.add(productWithImageItem);
         }
+
         return new ResponseEntity<>(productsWithImage, HttpStatus.OK);
     }
 
